@@ -1,14 +1,15 @@
 # MyTunes
 
 ## Description
-MyTunes is a desktop application for managing and playing your music library. It allows you to add, delete, and play songs, as well as organize your music collection.
+MyTunes is a desktop application for managing and playing your music library. It allows you to add, delete, and play songs, as well as organize your music collection. The application now leverages ID3 tags to automatically retrieve song metadata, improving the user experience.
 
 ## Features
-- Add songs to the library
+- Add songs to the library using ID3 tags
 - Delete songs from the library
-- Play, pause, stop, and navigate through songs
+- Play, pause, unpause, stop, and navigate through songs
 - Drag and drop files to add them to the library
 - SQLite database integration for storing song information
+- Songs from previous sessions are loaded and displayed on startup
 
 ## Installation
 1. **Clone the repository**:
@@ -25,7 +26,7 @@ MyTunes is a desktop application for managing and playing your music library. It
     - **IntelliJ IDEA**:
         - Open the project in IntelliJ IDEA.
         - Go to `File > Project Structure > Modules > Dependencies`.
-        - Click the `+` icon to add the necessary libraries (e.g., `sqlite-jdbc`, `jlayer`).
+        - Click the `+` icon to add the necessary libraries (e.g., `sqlite-jdbc`, `mp3agic`).
 
     - **Maven**:
         - Create a `pom.xml` file in the root directory of your project.
@@ -44,11 +45,22 @@ MyTunes is a desktop application for managing and playing your music library. It
                     <artifactId>sqlite-jdbc</artifactId>
                     <version>3.36.0.3</version>
                 </dependency>
-                <!-- JLayer (MP3 Player) -->
+                <!-- mp3agic (ID3 Tag Library) -->
                 <dependency>
-                    <groupId>javazoom</groupId>
-                    <artifactId>jlayer</artifactId>
-                    <version>1.0.1</version>
+                    <groupId>com.mpatric</groupId>
+                    <artifactId>mp3agic</artifactId>
+                    <version>0.9.1</version>
+                </dependency>
+                <!-- JavaFX (Media Player) -->
+                <dependency>
+                    <groupId>org.openjfx</groupId>
+                    <artifactId>javafx-controls</artifactId>
+                    <version>15.0.1</version>
+                </dependency>
+                <dependency>
+                    <groupId>org.openjfx</groupId>
+                    <artifactId>javafx-media</artifactId>
+                    <version>15.0.1</version>
                 </dependency>
             </dependencies>
         </project>
@@ -71,7 +83,9 @@ MyTunes is a desktop application for managing and playing your music library. It
 
         dependencies {
             implementation 'org.xerial:sqlite-jdbc:3.36.0.3'
-            implementation 'javazoom:jlayer:1.0.1'
+            implementation 'com.mpatric:mp3agic:0.9.1'
+            implementation 'org.openjfx:javafx-controls:15.0.1'
+            implementation 'org.openjfx:javafx-media:15.0.1'
         }
         ```
 
@@ -84,12 +98,13 @@ MyTunes is a desktop application for managing and playing your music library. It
         - Open the terminal and run `./gradlew build`.
 
 ## Usage
-- **Add Song**: Use the "Add Song" option in the menu or right-click on the library pane to add a song.
+- **Add Song**: Use the "Add Song" option in the menu or right-click on the library pane to add a song. The application will automatically extract metadata from the ID3 tags.
 - **Delete Song**: Select a song in the library and use the "Delete Song" option in the menu or right-click on the library pane.
 - **Play Song**: Select a song in the library and click the "Play" button.
 - **Pause/Unpause Song**: Click the "Pause" or "Unpause" button.
 - **Stop Song**: Click the "Stop" button.
 - **Next/Previous Song**: Use the "Next" or "Previous" buttons to navigate through the songs.
+- **Drag and Drop**: Drag and drop files directly onto the library pane to add them.
 
 ## Contributing
 1. Fork the repository.
@@ -99,5 +114,4 @@ MyTunes is a desktop application for managing and playing your music library. It
 5. Push to the branch (`git push origin feature-branch`).
 6. Open a pull request.
 
-## License
-This project is licensed under the MIT License.
+
