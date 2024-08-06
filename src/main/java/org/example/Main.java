@@ -1,9 +1,6 @@
 package org.example;
 
 
-import javafx.application.Platform;
-import javafx.embed.swing.JFXPanel;
-
 import javax.swing.*;
 
 public class Main {

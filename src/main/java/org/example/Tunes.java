@@ -21,9 +21,9 @@ import javafx.scene.media.MediaPlayer;
 import com.mpatric.mp3agic.*;
 
 public class Tunes extends JFrame implements ActionListener {
-    private JTable songLibrary;
+    JTable songLibrary;
     private Connection dbConnection;
-    private MediaPlayer mediaPlayer; // JavaFX MediaPlayer for better control
+    MediaPlayer mediaPlayer; // JavaFX MediaPlayer for better control
     private int currentSongIndex = -1;
 
     public Tunes() {
