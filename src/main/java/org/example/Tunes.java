@@ -145,19 +145,51 @@ public class Tunes extends JFrame implements ActionListener {
             ID3v2 id3v2Tag;
             if (mp3file.hasId3v2Tag()) {
                 id3v2Tag = mp3file.getId3v2Tag();
-            } else {
+            } else if (mp3file.hasId3v1Tag()) {
+                // If there's no ID3v2 tag, try to use ID3v1 tag
+                ID3v1 id3v1Tag = mp3file.getId3v1Tag();
                 id3v2Tag = new ID3v24Tag();
-                mp3file.setId3v2Tag(id3v2Tag);
+                id3v2Tag.setTitle(id3v1Tag.getTitle());
+                id3v2Tag.setArtist(id3v1Tag.getArtist());
+                id3v2Tag.setAlbum(id3v1Tag.getAlbum());
+                id3v2Tag.setYear(id3v1Tag.getYear());
+                id3v2Tag.setGenre(id3v1Tag.getGenre());
+                id3v2Tag.setComment(id3v1Tag.getComment());
+            } else {
+                // If there are no ID3 tags at all, create a new one
+                id3v2Tag = new ID3v24Tag();
             }
 
-            // Extract metadata from ID3 tags
+            // Extract metadata from ID3 tags, use default values if empty
             String title = id3v2Tag.getTitle();
+            if (title == null || title.isEmpty()) {
+                title = file.getName().replaceFirst("[.][^.]+$", ""); // Use filename without extension
+            }
             String artist = id3v2Tag.getArtist();
+            if (artist == null || artist.isEmpty()) {
+                artist = "Unknown Artist";
+            }
             String album = id3v2Tag.getAlbum();
+            if (album == null || album.isEmpty()) {
+                album = "Unknown Album";
+            }
             String yearStr = id3v2Tag.getYear();
-            int year = yearStr.isEmpty() ? 0 : Integer.parseInt(yearStr);
+            int year = 0;
+            if (yearStr != null && !yearStr.isEmpty()) {
+                try {
+                    year = Integer.parseInt(yearStr);
+                } catch (NumberFormatException e) {
+                    // If year is not a valid number, leave it as 0
+                }
+            }
             String genre = id3v2Tag.getGenreDescription();
+            if (genre == null || genre.isEmpty()) {
+                genre = "Unknown Genre";
+            }
             String comment = id3v2Tag.getComment();
+            if (comment == null || comment.isEmpty()) {
+                comment = "";
+            }
             String filePath = file.getAbsolutePath();
 
             // Insert song into database
